@@ -11,7 +11,13 @@ import { toast } from "react-toastify";
 import useUserStore from "../../store/useUserSrore";
 import useThemeStore from "../../store/themeStore";
 import { motion } from "framer-motion";
-import { FaChevronDown, FaUser, FaWhatsapp } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaChevronDown,
+  FaPlus,
+  FaUser,
+  FaWhatsapp,
+} from "react-icons/fa";
 import {
   sendOtp,
   updateUserProfile,
@@ -43,10 +49,10 @@ const loginValidationSchema = yup
       return !!(value?.phoneNumber || value?.email);
     }
   );
-const otpValidationSchema = yup.object().shape({
+const otpValidationSchema = yup.object({
   otp: yup
     .string()
-    .length(6, "otp must be 6 digit")
+    .matches(/^\d{6}$/, "otp must be exactly 6 digits")
     .required("otp is required"),
 });
 
@@ -80,12 +86,18 @@ const Login = () => {
   });
 
   const {
+    register: otpRegister,
     handleSubmit: handleOtpSubmit,
     formState: { errors: OtpErrors },
     setValue: setOtpValue,
   } = useForm({
     resolver: yupResolver(otpValidationSchema),
+    defaultValues: {
+      otp: "",
+    },
   });
+
+  console.log("OtpErrors", OtpErrors);
 
   const {
     register: profileRegister,
@@ -118,7 +130,7 @@ const Login = () => {
           toast.info("otp has been sent to your phone");
           setUserPhoneData({
             phoneNumber,
-            phoneSuffix: selectedCountry.dialCode,
+            phonePrefix: selectedCountry.dialCode,
           });
           setStep(2);
         }
@@ -145,19 +157,23 @@ const Login = () => {
       } else {
         responce = await verifyOtp(
           userPhoneData.phoneNumber,
-          userPhoneData.phoneSuffix,
+          userPhoneData.phonePrefix,
           otpString
         );
       }
+
+      console.log("response", responce);
 
       if (responce.status === "success") {
         toast.success("otp verified successfully");
         const user = responce.data?.user;
         if (user?.username && user?.profilePicture) {
           setUser(user);
-          toast.success("Welcome back to watsapp");
+          toast.success("Welcome back to Whatsapp");
           navigate("/");
           resetLoginState();
+        } else {
+          setStep(3);
         }
       }
     } catch (error) {
@@ -189,7 +205,7 @@ const Login = () => {
         formData.append("profilePicture", selectedAvatar);
       }
       await updateUserProfile(formData);
-      toast.success("welcome to watsapp");
+      toast.success("welcome to Whatsapp");
       navigate("/");
       resetLoginState();
     } catch (error) {
@@ -202,12 +218,18 @@ const Login = () => {
 
   //
   const handleOtpChange = (index, value) => {
+    if (!/^\d?$/.test(value)) return; // 🚫 block non-digits
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    setOtpValue(newOtp.join(""));
+
+    setOtpValue("otp", newOtp.join(""), {
+      shouldValidate: true,
+    });
+
     if (value && index < 5) {
-      document.getElementById(`otp-${index + 1}`).focus();
+      document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
 
@@ -229,6 +251,12 @@ const Login = () => {
     setUserPhoneData(null);
     setOtp(["", "", "", "", "", ""]);
     setError("");
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      document.getElementById(`otp-${index - 1}`)?.focus();
+    }
   };
 
   console.log("errors", loginErrors);
@@ -267,7 +295,7 @@ const Login = () => {
             theme === "dark" ? "text-white" : "text-gray-900"
           } text-2xl font-semibold mb-6`}
         >
-          watsapp login
+          Whatsapp login
         </h1>
         <ProgressBar />
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -418,31 +446,31 @@ const Login = () => {
         )}
         {step === 2 && (
           <form onSubmit={handleOtpSubmit(onOtpSubmit)} className="space-y-4">
+            <input type="hidden" {...otpRegister("otp")} />
             <p
               className={`text-center ${
                 theme === "dark" ? "text-gray-300" : "text-gray-600"
               } mb-4`}
             >
               Please enter the 6-digit code sent to your{" "}
-              {userPhoneData ? userPhoneData.phoneSuffix : "email"}
+              {userPhoneData ? userPhoneData.phonePrefix : "email"}
               {userPhoneData.phoneNumber && userPhoneData?.phoneNumber}
             </p>
-            <div>
+            <div className="flex justify-center space-x-2">
               {otp.map((digit, index) => (
                 <input
                   key={index}
                   id={`otp-${index}`}
                   type="text"
+                  inputMode="numeric"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
-                  className={`w-12 h-12 text-center border  ${
-                    theme === "dark"
-                      ? "bg-gray-700 border-gray-600 text-white"
-                      : "bg-white border-gray-300"
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    OtpErrors.otp ? "border-red-500" : ""
-                  } `}
+                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                  className={`w-12 h-12 text-center text-lg border rounded-md
+          focus:outline-none focus:ring-2 focus:ring-green-500
+          ${OtpErrors.otp ? "border-red-500" : "border-gray-300"}
+        `}
                 />
               ))}
             </div>
@@ -454,7 +482,7 @@ const Login = () => {
               type="submit"
               className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition"
             >
-              {loading ? <Spinner /> : "Vrify otp"}
+              {loading ? <Spinner /> : "Verify otp"}
             </button>
 
             <button
@@ -520,30 +548,38 @@ const Login = () => {
                 ))}
               </div>
             </div>
-
+            {/* input box user name  */}
             <div className="relative">
-              <FaUser
-                className={`absolute top-1/2 left-3 transform -translate-y-1/2 ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-500"
-                }`}
-              />
-              <input
-                type="text"
-                {...profileRegister("username")}
-                placeholder="Username"
-                className={`w-full pl-10 pr-3 py-2 border ${
-                  theme === "dark"
-                    ? "bg-gray-700 border-gray-600 text-white"
-                    : "bg-white border-gray-300"
-                } rounded-md focus:outline-none focus:ring-2 text-lg focus:ring-green-500   `}
-              />
-              {profileErrors.username && (
-                <p className="text-red-500 text-sm mt-10">
-                  {profileErrors.username.message}
-                </p>
-              )}
+              {/* Input wrapper */}
+              <div className="relative flex items-center">
+                <FaUser
+                  className={`absolute left-3 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  }`}
+                />
+
+                <input
+                  type="text"
+                  {...profileRegister("username")}
+                  placeholder="Username"
+                  className={`w-full pl-10 pr-3 py-2 border ${
+                    theme === "dark"
+                      ? "bg-gray-700 border-gray-600 text-white"
+                      : "bg-white border-gray-300"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-lg`}
+                />
+              </div>
+
+              <div className=" mt-1">
+                {profileErrors.username && (
+                  <p className="text-red-500 text-sm">
+                    {profileErrors.username.message}
+                  </p>
+                )}
+              </div>
             </div>
 
+            {/* terms and conditions */}
             <div className="flex items-center space-x-2">
               <input
                 {...profileRegister("agreed")}
@@ -562,7 +598,7 @@ const Login = () => {
               >
                 I agree to the
                 <a href="#" className="text-red-500 hover:underline">
-                  Thrms and Conditions
+                  Terms and Conditions
                 </a>
               </label>
             </div>

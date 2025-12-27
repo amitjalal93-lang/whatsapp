@@ -1,5 +1,6 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Loader({ progress = 0 }) {
   return (

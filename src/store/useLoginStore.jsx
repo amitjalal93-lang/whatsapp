@@ -8,7 +8,7 @@ const useLoginStore = create(
       userPhoneData: null,
       setStep: (step) => set({ step }),
       setUserPhoneData: (data) => set({ userPhoneData: data }),
-      resetLoginstate: () => set({ step: 1, userPhoneData: null }),
+      resetLoginState: () => set({ step: 1, userPhoneData: null }),
     }),
     {
       name: "login-storage",

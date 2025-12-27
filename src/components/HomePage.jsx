@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import Layout from "./Layout";
 import ChatList from "../pages/chatSection/ChatList";
 import { motion } from "framer-motion";
+import { getAllUsers } from "../services/user.service";
 
 const HomePage = () => {
   const [allUsers, setAllUsers] = useState([]);
-  const getAllUsers = async () => {
-    try {
-      const result = await getAllUsers();
-      if (result.status === "success") {
-        setAllUsers(result.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    getAllUsers();
+    const getData = async () => {
+      try {
+        const result = await getAllUsers();
+        if (result?.status === "success") {
+          setAllUsers(result.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getData();
   }, []);
 
   return (

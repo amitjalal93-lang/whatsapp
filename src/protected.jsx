@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import useUserStore from "./store/useUserSrore";
+import { checkUserAuth } from "./services/user.service";
+import Loader from "./utils/Loader";
 
 export const ProtectedRoute = () => {
   const location = useLocation();
@@ -19,6 +21,7 @@ export const ProtectedRoute = () => {
           clearUser();
         }
       } catch (error) {
+        console.log(error);
         clearUser();
       } finally {
         setIsChecking(false);

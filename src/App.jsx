@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/user-login/login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HomePage from "./components/HomePage";
@@ -8,6 +7,7 @@ import UserDetails from "./components/UserDetails";
 import Status from "./pages/StatusSection/Status";
 import Setting from "./pages/SettingSection/Setting";
 import { ProtectedRoute, PublicRoute } from "./protected";
+import Login from "./pages/user-login/Login";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route element={<PublicRoute />}>
-            <Route path="/" element={<Login />} />
+            <Route path="/user-login" element={<Login />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<HomePage />} />

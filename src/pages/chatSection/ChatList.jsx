@@ -4,6 +4,7 @@ import useThemeStore from "../../store/themeStore";
 import useUserStore from "../../store/useUserSrore";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
+import formatTimestamp from "../../utils/formatTime";
 
 const ChatList = ({ contacts }) => {
   const setSelectedContact = useLayoutStore(

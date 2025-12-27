@@ -1,10 +1,10 @@
 import axiosInstance from "./url.service";
 
-export const sendOtp = async (phoneNumber, phoneSuffix, email) => {
+export const sendOtp = async (phoneNumber, phonePrefix, email) => {
   try {
     const responce = await axiosInstance.post("/auth/send-otp", {
       phoneNumber,
-      phoneSuffix,
+      phonePrefix,
       email,
     });
     return responce.data;
@@ -13,11 +13,11 @@ export const sendOtp = async (phoneNumber, phoneSuffix, email) => {
   }
 };
 
-export const verifyOtp = async (phoneNumber, phoneSuffix, otp, email) => {
+export const verifyOtp = async (phoneNumber, phonePrefix, otp, email) => {
   try {
     const responce = await axiosInstance.post("/auth/verify-otp", {
       phoneNumber,
-      phoneSuffix,
+      phonePrefix,
       otp,
       email,
     });
