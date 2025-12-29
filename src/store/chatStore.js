@@ -4,7 +4,6 @@ import {
   apiDeleteRequestAuthenticated,
   apiFilePostRequestAuthenticated,
   apiGetRequestAuthenticated,
-  apiPostRequestAuthenticated,
   apiPutRequestAuthenticated,
 } from "../services/url.service";
 
@@ -358,7 +357,9 @@ export const usechatStore = create((set, get) => ({
   addReaction: async (messageId, emoji) => {
     const socket = getSocket();
     const { currentUser } = get();
+
     if (socket && currentUser) {
+      console.log("hi", messageId, emoji, currentUser?._id);
       socket.emit("add_reaction", {
         messageId,
         emoji,

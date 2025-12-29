@@ -1,6 +1,12 @@
 import { format } from "date-fns";
 import React, { useRef, useState } from "react";
-import { FaCheck, FaCheckDouble, FaRegCopy, FaSmile } from "react-icons/fa";
+import {
+  FaCheck,
+  FaCheckDouble,
+  FaRegCopy,
+  FaSmile,
+  FaPlus,
+} from "react-icons/fa";
 import useOutsideclick from "../../hooks/useOutsideclick";
 import EmojiPicker from "emoji-picker-react";
 import { HiDotsVertical } from "react-icons/hi";
@@ -98,7 +104,7 @@ const MessageBubble = ({
         <div
           className={`absolute ${
             isUserMessage ? "-left-10" : "-right-10"
-          } top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opcity-100 transition-opacity flex flex-col gap-2`}
+          } top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2`}
         >
           <button
             onClick={() => setShowReactions(!showReactions)}

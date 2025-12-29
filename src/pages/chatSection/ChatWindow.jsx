@@ -195,7 +195,7 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
 
   console.log("emssa", messages, groupMessages);
 
-  const handleReaction = (emoji, messageId) => {
+  const handleReaction = (messageId, emoji) => {
     addReaction(messageId, emoji);
   };
 
