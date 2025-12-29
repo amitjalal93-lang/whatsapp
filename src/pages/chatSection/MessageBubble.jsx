@@ -1,8 +1,9 @@
 import { format } from "date-fns";
 import React, { useRef, useState } from "react";
-import { FaCheck, FaCheckDouble, FaRegCopy } from "react-icons/fa";
+import { FaCheck, FaCheckDouble, FaRegCopy, FaSmile } from "react-icons/fa";
 import useOutsideclick from "../../hooks/useOutsideclick";
 import EmojiPicker from "emoji-picker-react";
+import { HiDotsVertical } from "react-icons/hi";
 
 const MessageBubble = ({
   message,
@@ -48,7 +49,8 @@ const MessageBubble = ({
     if (showOptions) setShowOptions(false);
   });
 
-  if (message === 0) return;
+  if (message === 0) return null;
+
   return (
     <div className={`chat ${bubbleClass}`}>
       <div className={`${bubbleContentClass} relative group `} ref={messageRef}>

@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { getSocket } from "../services/chat.service";
-import axios from "axios";
-import axiosInstance from "../services/url.service";
+import {
+  apiDeleteRequestAuthenticated,
+  apiFilePostRequestAuthenticated,
+  apiGetRequestAuthenticated,
+  apiPostRequestAuthenticated,
+  apiPutRequestAuthenticated,
+} from "../services/url.service";
 
 export const usechatStore = create((set, get) => ({
   conversations: [],
@@ -131,7 +136,7 @@ export const usechatStore = create((set, get) => ({
   fetchConversations: async () => {
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.get("/api/conversations");
+      const { data } = await apiGetRequestAuthenticated("/chat/conversations");
       set({ conversations: data, loading: false });
 
       get().initsocketListeners();
@@ -151,7 +156,7 @@ export const usechatStore = create((set, get) => ({
 
     set({ loading: true, error: null });
     try {
-      const { data } = await axios.get(
+      const { data } = await apiGetRequestAuthenticated(
         `/chat/conversations/${conversationId}/messages`
       );
       const messageArray = data.data || data || [];
@@ -223,10 +228,9 @@ export const usechatStore = create((set, get) => ({
     }));
 
     try {
-      const { data } = await axiosInstance.post(
+      const { data } = await apiFilePostRequestAuthenticated(
         "/chat/send-message",
-        formData,
-        { headers: { "content-Type": "multipart/form-data" } }
+        formData
       );
 
       const messageData = data.data || data;
@@ -309,7 +313,7 @@ export const usechatStore = create((set, get) => ({
     if (unreadIds.length === 0) return;
 
     try {
-      const { data } = await axiosInstance.put("/chat/messages/read", {
+      const { data } = await apiPutRequestAuthenticated("/chat/messages/read", {
         messageIda: unreadIds,
       });
 
@@ -337,7 +341,7 @@ export const usechatStore = create((set, get) => ({
 
   deleteMessage: async (messageId) => {
     try {
-      await axiosInstance.delete(`/chat/messages/${messageId}`);
+      await apiDeleteRequestAuthenticated(`/chat/messages/${messageId}`);
 
       set((state) => ({
         messages: state.messages.filter((msg) => msg._id !== messageId),
@@ -393,7 +397,7 @@ export const usechatStore = create((set, get) => ({
     const { typingUsers, currentConversation } = get();
     if (
       !currentConversation ||
-      !typingUsers.has(currentconversation) ||
+      !typingUsers.has(currentConversation) ||
       !userId
     ) {
       return false;

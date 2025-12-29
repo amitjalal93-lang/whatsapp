@@ -67,7 +67,7 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
         )
       );
 
-      if (conversation._id) {
+      if (conversation?._id) {
         fetchMessages(conversation._id);
       }
     }
@@ -175,8 +175,9 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
   // group message
   const groupMessages = Array.isArray(messages)
     ? messages.reduce((acc, msg) => {
-        if (!message.createdAt) return acc;
-        const date = new Date(message.createdAt);
+        if (!msg.createdAt) return acc;
+
+        const date = new Date(msg.createdAt);
 
         if (isValidate(date)) {
           const dateString = format(date, "yyyy-MM-dd");
@@ -184,18 +185,19 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
           if (!acc[dateString]) {
             acc[dateString] = [];
           }
-          acc[dateString].push(message);
+          acc[dateString].push(msg);
         } else {
-          console.log("invalid date for message", message);
+          console.log("invalid date for message", msg);
         }
         return acc;
       }, {})
     : {};
 
+  console.log("emssa", messages, groupMessages);
+
   const handleReaction = (emoji, messageId) => {
     addReaction(messageId, emoji);
   };
-  console.log("this is my cntact", selectedContact);
 
   if (!selectedContact) {
     return (
