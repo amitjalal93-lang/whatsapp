@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { avatars } from "../../utils/avatars.js";
 
 import { toast } from "react-toastify";
-import useUserStore from "../../store/useUserSrore";
+import useUserStore from "../../store/useUserStore";
 import useThemeStore from "../../store/themeStore";
 import { motion } from "framer-motion";
 import {

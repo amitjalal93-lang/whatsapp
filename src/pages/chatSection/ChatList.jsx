@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useLayoutStore from "../../store/layoutStore";
 import useThemeStore from "../../store/themeStore";
-import useUserStore from "../../store/useUserSrore";
+import useUserStore from "../../store/useUserStore";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import formatTimestamp from "../../utils/formatTime";

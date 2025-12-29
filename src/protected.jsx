@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import useUserStore from "./store/useUserSrore";
+import useUserStore from "./store/useUserStore.jsx";
 import { checkUserAuth } from "./services/user.service";
 import Loader from "./utils/Loader";
 
