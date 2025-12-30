@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import useUserStore from "../store/useUserStore";
+import useUserStore from "../store/useUserStore.js";
 
 let socket = null;
 

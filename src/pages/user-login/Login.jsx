@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { avatars } from "../../utils/avatars.js";
 
 import { toast } from "react-toastify";
-import useUserStore from "../../store/useUserStore";
-import useThemeStore from "../../store/themeStore";
+import useUserStore from "../../store/useUserStore.js";
+import useThemeStore from "../../store/themeStore.js";
 import { motion } from "framer-motion";
 import {
   FaArrowLeft,

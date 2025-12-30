@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import useThemeStore from "../store/themeStore";
-import useUserStore from "../store/useUserStore";
-import useLayoutStore from "../store/layoutStore";
+import useThemeStore from "../store/themeStore.js";
+import useUserStore from "../store/useUserStore.js";
+import useLayoutStore from "../store/layoutStore.js";
 import { motion } from "framer-motion";
 
 import { FaWhatsapp, FaUserCircle, FaCog } from "react-icons/fa";

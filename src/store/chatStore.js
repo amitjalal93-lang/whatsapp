@@ -363,7 +363,7 @@ export const usechatStore = create((set, get) => ({
       socket.emit("add_reaction", {
         messageId,
         emoji,
-        userId: currentUser?._id,
+        reactionUserId: currentUser?._id,
       });
     }
   },

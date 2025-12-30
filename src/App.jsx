@@ -8,7 +8,7 @@ import Status from "./pages/StatusSection/Status";
 import Setting from "./pages/SettingSection/Setting";
 import { ProtectedRoute, PublicRoute } from "./protected";
 import Login from "./pages/user-login/Login";
-import useUserStore from "./store/useUserStore";
+import useUserStore from "./store/useUserStore.js";
 import { disconnectSocket, initializeeSocket } from "./services/chat.service";
 import { usechatStore } from "./store/chatStore";
 
