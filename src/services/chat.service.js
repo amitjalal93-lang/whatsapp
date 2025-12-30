@@ -11,7 +11,6 @@ export const initializeeSocket = () => {
   const BACKEND_URL = import.meta.env.VITE_API_URL;
 
   socket = io(BACKEND_URL, {
-    withCredentials: true,
     transports: ["websocket", "polling"],
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,

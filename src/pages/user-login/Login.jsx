@@ -259,7 +259,7 @@ const Login = () => {
     }
   };
 
-  console.log("errors", loginErrors);
+  console.log("errors", loginErrors, theme);
 
   return (
     <div
@@ -274,7 +274,7 @@ const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className={`${
-          theme === "dark" ? "bg-gray-900: text-white " : "bg-white  "
+          theme === "dark" ? "bg-gray-900: text-white" : "bg-white  text-black"
         } p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md relative z-10}`}
       >
         <motion.div
@@ -354,11 +354,11 @@ const Login = () => {
                           placeholder="search country"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className={`w-full px-2 py- border ${
+                          className={`w-full px-2 py-2 border ${
                             theme === "dark"
-                              ? "bg-gray-600 border-gray-500 text-white"
-                              : "bg-white border-gray-300"
-                          } rounded-md text-sm focus:outline-none focus:right-2 focus:ring-green-500`}
+                              ? "bg-gray-600 border-gray-500 text-white!"
+                              : "bg-white border-gray-300 !text-black"
+                          } rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500`}
                         />
                       </div>
                       {filteredCountries.map((country) => (
