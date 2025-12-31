@@ -6,6 +6,7 @@ import Layout from "../../components/Layout";
 import StatusPreview from "./StatusPreview";
 import { motion } from "framer-motion";
 import { FaEllipsisH, FaPlus, FaCamera } from "react-icons/fa";
+import formatTimestamp from "../../utils/formatTime.jsx";
 
 const Status = () => {
   const [previewContacts, setPreviewContacts] = useState(null);
@@ -35,6 +36,7 @@ const Status = () => {
     clearError,
     reset,
     initializeSocket,
+    cleanupSocket,
   } = useStatusStore();
 
   const userStatuses = getUserStatuses(user?._id);

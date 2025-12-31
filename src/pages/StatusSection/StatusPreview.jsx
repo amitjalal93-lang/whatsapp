@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import formatTimestamp from "../../utils/formatTime";
 const StatusPreview = ({
   contact,
   currentIndex,

@@ -1,4 +1,5 @@
 import React from "react";
+import formatTimestamp from "../../utils/formatTime";
 
 const StatusList = ({ contact, onPreview, theme }) => {
   return (
@@ -35,7 +36,7 @@ const StatusList = ({ contact, onPreview, theme }) => {
             theme === "dark" ? "text-gray-400" : "text-gray-500"
           }`}
         >
-          {formatTimeStamp(
+          {formatTimestamp(
             contact.statuses[contact.statuses.length - 1].timestamp
           )}
         </p>

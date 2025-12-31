@@ -4,7 +4,15 @@ import { logoutUser } from "../../services/user.service";
 import { toast } from "react-toastify";
 import useUserStore from "../../store/useUserStore";
 import Layout from "../../components/Layout";
-import { FaSearch, FaMoon, FaSun, FaUser, FaComment } from "react-icons/fa";
+import {
+  FaSearch,
+  FaMoon,
+  FaSun,
+  FaUser,
+  FaComment,
+  FaQuestionCircle,
+  FaSignInAlt,
+} from "react-icons/fa";
 const Setting = () => {
   const [isThemeDialogOpen, setIsThemeDialogOpen] = useState(false);
   const { theme } = useThemeStore();
@@ -81,7 +89,7 @@ const Setting = () => {
                   { icon: <FaUser />, lable: "Account", href: "/user-profile" },
                   { icon: <FaComment />, lable: "Chats", href: "/" },
                   {
-                    icon: <FaQusestionCircle />,
+                    icon: <FaQuestionCircle />,
                     lable: "Help",
                     href: "/help",
                   },
