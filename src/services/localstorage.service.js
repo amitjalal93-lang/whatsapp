@@ -1,9 +1,9 @@
 export const getAccessTokenLocalStorage = () => {
-  return localStorage.getItem("accessToken");
+  return localStorage.getItem("auth_token");
 };
 
 export const setAccessTokenLocalStorage = (token) => {
-  localStorage.setItem("accessToken", token);
+  localStorage.setItem("auth_token", token);
 };
 
 export const getUserLocalStorage = () => {

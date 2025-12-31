@@ -241,6 +241,8 @@ export const usechatStore = create((set, get) => ({
         ),
       }));
 
+      socket.emit("send_message", messageData);
+
       return messageData;
     } catch (error) {
       console.log("Error sending message", error);
