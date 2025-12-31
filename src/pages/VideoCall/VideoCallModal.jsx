@@ -7,6 +7,7 @@ import {
   FaVideoSlash,
   FaMicrophone,
   FaTimes,
+  FaMicrophoneSlash,
 } from "react-icons/fa";
 import useThemeStore from "../../store/themeStore.js";
 const VideoCallModal = ({ socket }) => {
@@ -194,7 +195,7 @@ const VideoCallModal = ({ socket }) => {
         offerToReceiveAudio: true,
         offerToReceiveVideo: callType === "video",
       });
-      await pc.setLocatDescription(offer);
+      await pc.setLocalDescription(offer);
       socket.emit("webrtc_offer", {
         offer,
         receiverId: currentCall?.participantId,
@@ -214,9 +215,10 @@ const VideoCallModal = ({ socket }) => {
       // get media
       const stream = await initialzeMedia(callType === "video");
       console.log("stream ---------------------->", stream, callType);
-      createPeerConnection(stream, "receiver");
+      const pc = createPeerConnection(stream, "receiver");
+      setPeerConnection(pc);
 
-      socket.emit("accept_call ", {
+      socket.emit("accept_call", {
         callerId: incomingCall?.callerId,
         callId: incomingCall?.callId,
         receiverId: {
@@ -333,20 +335,18 @@ const VideoCallModal = ({ socket }) => {
     // reciver ice condeadates
 
     const handleWebRTCCandidates = async ({ candidate }) => {
-      if (!peerConnection && peerConnection.signalingState !== "closed") {
-        if (peerConnection.remoteDescription) {
-          try {
-            await peerConnection.addIceCandidate(
-              new RTCIceCandidate(candidate)
-            );
-            console.log("ICE candidate added");
-          } catch (error) {
-            console.error("candidate error", error);
-          }
-        } else {
-          console.log("queuing ice candidate");
-          addIceCandidate(candidate);
+      if (!peerConnection || peerConnection.signalingState === "closed") return;
+
+      if (peerConnection.remoteDescription) {
+        try {
+          await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+          console.log("ICE candidate added");
+        } catch (error) {
+          console.error("candidate error", error);
         }
+      } else {
+        console.log("queuing ice candidate");
+        addIceCandidate(candidate);
       }
     };
     // register all events listernes
@@ -537,7 +537,7 @@ const VideoCallModal = ({ socket }) => {
                   {isAudioEnabled ? (
                     <FaMicrophone className="w-5 h-5" />
                   ) : (
-                    <Famicro className="w-5 h-5" />
+                    <FaMicrophoneSlash className="w-5 h-5" />
                   )}
                 </button>
                 <button
