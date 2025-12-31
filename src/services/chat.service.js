@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import useUserStore from "../store/useUserStore.js";
 
 let socket = null;
-
+const token = localStorage.getItem("auth_token");
 export const initializeeSocket = () => {
   if (socket) {
     return socket;
@@ -11,6 +11,7 @@ export const initializeeSocket = () => {
   const BACKEND_URL = import.meta.env.VITE_API_URL;
 
   socket = io(BACKEND_URL, {
+    auth: { token },
     transports: ["websocket", "polling"],
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
