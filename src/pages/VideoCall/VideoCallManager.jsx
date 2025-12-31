@@ -7,7 +7,7 @@ const VideoCallManager = ({ socket }) => {
     setIncomingCall,
     setCurrentCall,
     setCallType,
-    SetCallModalOpen,
+    setCallModalOpen,
     endCall,
     setCallStatus,
   } = useVideoCallStore();
@@ -31,7 +31,7 @@ const VideoCallManager = ({ socket }) => {
         callId,
       });
       setCallType(callType);
-      SetCallModalOpen(true);
+      setCallModalOpen(true);
       setCallStatus("ringing");
     };
 
@@ -53,7 +53,7 @@ const VideoCallManager = ({ socket }) => {
     socket,
     setIncomingCall,
     setCallType,
-    SetCallModalOpen,
+    setCallModalOpen,
     setCallStatus,
     endCall,
   ]);
@@ -72,7 +72,7 @@ const VideoCallManager = ({ socket }) => {
       };
       setCurrentCall(callData);
       setCallType(callType);
-      SetCallModalOpen(true);
+      setCallModalOpen(true);
       setCallStatus("calling");
 
       //   emit the call
@@ -86,7 +86,7 @@ const VideoCallManager = ({ socket }) => {
         },
       });
     },
-    [user, socket, setCurrentCall, setCallType, SetCallModalOpen, setCallStatus]
+    [user, socket, setCurrentCall, setCallType, setCallModalOpen, setCallStatus]
   );
 
   // expose the initiate call fuction to store

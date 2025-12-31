@@ -204,11 +204,11 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
     if (selectedContact && online) {
       const { initiateCall } = useVideoCallStore.getState();
 
-      const avartar = selectedContact?.profilePicture;
+      const avatar = selectedContact?.profilePicture;
       initiateCall(
         selectedContact?._id,
-        selectedContact?.name,
-        avartar,
+        selectedContact?.username,
+        avatar,
         "video"
       );
     } else {

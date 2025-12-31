@@ -36,7 +36,7 @@ const Layout = ({
 
   return (
     <div
-      className={`min-h-screen bg-${
+      className={`min-h-screen  ${
         theme === "dark" ? "bg-[#111b21] text-white" : "bg-gray-100 text-black"
       } flex relative`}
     >
@@ -52,7 +52,7 @@ const Layout = ({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween" }}
-              className={`w-full md:2/5 h-full ${isMobile ? "pb-16" : ""}`}
+              className={`w-1/2 h-full ${isMobile ? "pb-16" : ""}`}
             >
               {children}
             </motion.div>

@@ -18,16 +18,13 @@ const VideoCallModal = ({ socket }) => {
     isCallActive,
     localStream,
     callType,
+    isAudioEnabled,
     remoteStream,
     isVideoEnabled,
     peerConnection,
-    iceCandidatesQueue,
     isCallModalOpen,
     callStatus,
-    setIncomingCall,
     setCurrentCall,
-    setCallType,
-    SetCallModalOpen,
     endCall,
     setCallStatus,
     setCallActive,
@@ -70,7 +67,6 @@ const VideoCallModal = ({ socket }) => {
 
     return null;
   }, [incomingCall, currentCall, isCallActive]);
-
   // connection detection
 
   useEffect(() => {
@@ -97,9 +93,19 @@ const VideoCallModal = ({ socket }) => {
     }
   }, [remoteStream]);
 
+  const stopMediaStream = (stream) => {
+    if (!stream) return;
+    stream.getTracks().forEach((track) => track.stop());
+  };
+
   // initilizw media stream
   const initialzeMedia = async (video = true) => {
     try {
+      // 🔴 stop old stream first
+      if (localStream) {
+        stopMediaStream(localStream);
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: video ? { width: 640, height: 480 } : false,
         audio: true,
@@ -115,8 +121,9 @@ const VideoCallModal = ({ socket }) => {
 
   // create peer connection
 
-  const createPeerConnection = () => {
+  const createPeerConnection = (stream, role) => {
     const pc = new RTCPeerConnection(rtcConfiguration);
+
     //    add local tracks immediatly
     if (stream) {
       stream.getTracks().forEach((track) => {
@@ -206,9 +213,10 @@ const VideoCallModal = ({ socket }) => {
       setCallStatus("connecting");
       // get media
       const stream = await initialzeMedia(callType === "video");
+      console.log("stream ---------------------->", stream, callType);
       createPeerConnection(stream, "receiver");
 
-      socket.emit("accept call ", {
+      socket.emit("accept_call ", {
         callerId: incomingCall?.callerId,
         callId: incomingCall?.callId,
         receiverId: {
@@ -256,7 +264,7 @@ const VideoCallModal = ({ socket }) => {
   // socket event listeners
   useEffect(() => {
     if (!socket) return;
-    const handleCallAccepted = ({ receiverName }) => {
+    const handleCallAccepted = () => {
       if (currentCall) {
         setTimeout(() => {
           initializeCallerCall();
@@ -296,7 +304,7 @@ const VideoCallModal = ({ socket }) => {
       }
     };
     // receiver answer
-    const handleWebRTCAnswer = async ({ answer, senderId }) => {
+    const handleWebRTCAnswer = async ({ answer }) => {
       if (!peerConnection) return;
 
       if (peerConnection.signalingState === "closed") {
@@ -324,7 +332,7 @@ const VideoCallModal = ({ socket }) => {
     };
     // reciver ice condeadates
 
-    const handleWebRTCCandidates = async ({ candidate, senderId }) => {
+    const handleWebRTCCandidates = async ({ candidate }) => {
       if (!peerConnection && peerConnection.signalingState !== "closed") {
         if (peerConnection.remoteDescription) {
           try {
@@ -362,7 +370,7 @@ const VideoCallModal = ({ socket }) => {
 
   if (!isCallModalOpen && !incomingCall) return null;
 
-  const shouldShowCallModal =
+  const shouldShowActiveCall =
     isCallModalOpen || callStatus === "calling" || callStatus === "connecting";
 
   return (
@@ -423,7 +431,7 @@ const VideoCallModal = ({ socket }) => {
         {shouldShowActiveCall && (
           <div className="relative w-full h-full">
             {callType === "video" && (
-              <VideoCall
+              <video
                 ref={remoteVideoRef}
                 autoPlay
                 playsInline
