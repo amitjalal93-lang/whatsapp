@@ -6,7 +6,9 @@ import Layout from "../../components/Layout";
 import StatusPreview from "./StatusPreview";
 import { motion } from "framer-motion";
 import { FaEllipsisH, FaPlus, FaCamera } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import formatTimestamp from "../../utils/formatTime.jsx";
+import StatusList from "./StatusList.jsx";
 
 const Status = () => {
   const [previewContacts, setPreviewContacts] = useState(null);
@@ -107,7 +109,7 @@ const Status = () => {
   };
 
   const handlePreviewNext = () => {
-    if (currentStatusIndex === previewContacts.statuses.length - 1) {
+    if (currentStatusIndex === previewContacts.statuses.length - 2) {
       setCurrentStatusIndex((prev) => prev + 1);
     } else {
       hanldePreviewClose();
@@ -130,7 +132,7 @@ const Status = () => {
   return (
     <Layout
       isStatusPreviewOpen={!!previewContacts}
-      StatusPreviewContent={
+      statusPreviewContent={
         previewContacts && (
           <StatusPreview
             contact={previewContacts}
@@ -320,7 +322,7 @@ const Status = () => {
 
           {/* recent update from other users */}
 
-          {!loading && otherStatuses.lingth > 0 && (
+          {!loading && otherStatuses.length > 0 && (
             <div
               className={`p-4 space-y-4 shadow-md ${
                 theme === "dark" ? "bg-[rgb(17,27,33)]" : "bg-white"

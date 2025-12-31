@@ -116,7 +116,7 @@ const UserDetails = () => {
                     type="file"
                     id="profileUpload"
                     accept="image/*"
-                    onAbort={handleImageChange}
+                    onChange={handleImageChange}
                     className="hidden"
                   />
                 </label>

@@ -1,8 +1,8 @@
 import { setAccessTokenLocalStorage } from "./localstorage.service";
 import {
+  apiFilePutRequestAuthenticated,
   apiGetRequestAuthenticated,
   apiPostRequest,
-  apiPutRequestAuthenticated,
 } from "./url.service";
 
 export const sendOtp = async (phoneNumber, phonePrefix, email) => {
@@ -36,7 +36,7 @@ export const verifyOtp = async (phoneNumber, phonePrefix, otp, email) => {
 
 export const updateUserProfile = async (updateData) => {
   try {
-    const responce = await apiPutRequestAuthenticated(
+    const responce = await apiFilePutRequestAuthenticated(
       "/auth/update-profile",
       updateData
     );

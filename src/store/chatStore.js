@@ -21,7 +21,7 @@ export const usechatStore = create((set, get) => ({
     if (!socket) return;
 
     //remove exiting listerners to prevent duplicate handlers
-    socket.off("received_message");
+    socket.off("receive_message");
     socket.off("user_typing");
     socket.off("user_status");
     socket.off("message_send");
@@ -29,7 +29,11 @@ export const usechatStore = create((set, get) => ({
     socket.off("message_deleted");
 
     // listen for incoming messsages
-    socket.on("received_message", (message) => {});
+    socket.on("receive_message", (message) => {
+      set((state) => ({
+        messages: [...state.messages, message],
+      }));
+    });
 
     //  confirm message dilivery
 
@@ -116,9 +120,9 @@ export const usechatStore = create((set, get) => ({
           socket.emit("get_user_status", otherUser._id, (status) => {
             set((state) => {
               const newOnlineUsers = new Map(state.onlineUsers);
-              newOnlineUsers.set(state.userId, {
-                isOnline: state.isOnline,
-                lastSeen: state.lastSeen,
+              newOnlineUsers.set(status.userId, {
+                isOnline: status.isOnline,
+                lastSeen: status.lastSeen,
               });
               return {
                 onlineUsers: newOnlineUsers,

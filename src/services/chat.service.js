@@ -20,7 +20,7 @@ export const initializeeSocket = () => {
   //   connections events
 
   socket.on("connect", () => {
-    console.log("socket connected", user._id);
+    console.log("socket connected", user?._id);
     socket.emit("user_connected", user._id);
   });
 

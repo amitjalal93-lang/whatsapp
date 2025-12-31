@@ -3,7 +3,7 @@ import formatTimestamp from "../../utils/formatTime";
 
 const StatusList = ({ contact, onPreview, theme }) => {
   return (
-    <div className="flex items-center space-x-4 py-2">
+    <div className="flex items-center space-x-4 py-2" onClick={onPreview}>
       <div className="relative">
         <img
           src={contact.avatar}

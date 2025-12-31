@@ -13,6 +13,7 @@ import {
   FaQuestionCircle,
   FaSignInAlt,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const Setting = () => {
   const [isThemeDialogOpen, setIsThemeDialogOpen] = useState(false);
   const { theme } = useThemeStore();
@@ -86,10 +87,10 @@ const Setting = () => {
             <div className="h-[calc(100vh-280px)] overflow-y-auto">
               <div className="space-y-1">
                 {[
-                  { icon: <FaUser />, lable: "Account", href: "/user-profile" },
-                  { icon: <FaComment />, lable: "Chats", href: "/" },
+                  { icon: FaUser, lable: "Account", href: "/user-profile" },
+                  { icon: FaComment, lable: "Chats", href: "/" },
                   {
-                    icon: <FaQuestionCircle />,
+                    icon: FaQuestionCircle,
                     lable: "Help",
                     href: "/help",
                   },
@@ -105,7 +106,6 @@ const Setting = () => {
                 }`}
                   >
                     <item.icon className="w-5 h-5" />
-
                     <div
                       className={`border-b ${
                         theme === "dark" ? "border-gray-700" : "border-gray-200"

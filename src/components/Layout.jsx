@@ -12,7 +12,7 @@ const Layout = ({
   isThemeDialogOpen,
   toggleThemeDialog,
   isStatusPreviewOpen,
-  isStatusPreviewContent,
+  statusPreviewContent,
 }) => {
   const selectedContact = useLayoutStore((state) => state.selectedContact);
   const setSelectedContact = useLayoutStore(
@@ -87,7 +87,7 @@ const Layout = ({
                 : "bg-white text-black"
             } p-6 rounded-lg shadow-lg max-w-sm w-full`}
           >
-            <h2 className="text-2xl font-semibold mb-4">Chosse a Theme</h2>
+            <h2 className="text-2xl font-semibold mb-4">Choose a Theme</h2>
             <div className="space-y-4">
               <label className="flex items-center space-x-3 coursor-pointer">
                 <input
@@ -124,7 +124,7 @@ const Layout = ({
 
       {isStatusPreviewOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          {isStatusPreviewContent}
+          {statusPreviewContent}
         </div>
       )}
     </div>

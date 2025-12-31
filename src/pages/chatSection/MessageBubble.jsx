@@ -63,11 +63,11 @@ const MessageBubble = ({
         <div className="flex justify-center gap-2">
           {message.contentType === "text" && <p>{message.content}</p>}
           {message.contentType === "image" && (
-            <div>
+            <div className="w-full">
               <img
                 src={message.imageOrVideoUrl}
                 alt="image-video"
-                className="rounded-lg max-w-xs"
+                className="rounded-lg size-full"
               />
               <p className="mt-1">{message.content}</p>
             </div>

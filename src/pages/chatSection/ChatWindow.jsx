@@ -196,8 +196,6 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
       }, {})
     : {};
 
-  console.log("emssa", messages, groupMessages);
-
   const handleReaction = (messageId, emoji) => {
     addReaction(messageId, emoji);
   };
@@ -277,21 +275,19 @@ const ChatWindow = ({ selectedContact, setSelectedContact }) => {
             <h1 className="font-semibold text-start">
               {selectedContact?.username}
             </h1>
-            {isTyping ? (
-              <div>Typing...</div>
-            ) : (
-              <p
-                className={`text-sm ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                {online
-                  ? "online"
-                  : lastSeen
-                  ? `last seen ${format(new Date(lastSeen), "h:mm")}`
-                  : "offline"}
-              </p>
-            )}
+            <p
+              className={`text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              {isTyping
+                ? "Typing..."
+                : online
+                ? "online"
+                : lastSeen
+                ? `last seen ${format(new Date(lastSeen), "h:mm")}`
+                : "offline"}
+            </p>
           </div>
 
           <div className="flex items-center space-x-4">

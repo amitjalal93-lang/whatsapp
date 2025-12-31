@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import formatTimestamp from "../../utils/formatTime";
+import {
+  FaChevronDown,
+  FaChevronLeft,
+  FaChevronRight,
+  FaEye,
+  FaTimes,
+  FaTrash,
+} from "react-icons/fa";
 const StatusPreview = ({
   contact,
   currentIndex,
@@ -15,7 +23,15 @@ const StatusPreview = ({
   const [progress, setProgress] = useState(0);
   const [showViewers, setShowViewers] = useState(false);
   const currentStatus = contact?.statuses[currentIndex];
-  const isOwner = contact?.id === currentUser?.id;
+  const isOwnerStatus = contact?.id === currentUser?._id;
+  console.log(
+    "is",
+    isOwnerStatus,
+    "contact",
+    contact?.id,
+    "currentUser",
+    currentUser?._id
+  );
 
   useEffect(() => {
     setProgress(0);
@@ -31,7 +47,7 @@ const StatusPreview = ({
     }, 100);
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, onNext]);
 
   const handleViewersToggle = () => {
     setShowViewers(!showViewers);
@@ -62,7 +78,7 @@ const StatusPreview = ({
     >
       <div
         className="relative w-full h-full max-w-4xl mx-auto flex justify-center items-center"
-        onClick={(e) => e.stopPropagation}
+        onClick={(e) => e.stopPropagation()}
       >
         <div
           className={`relative w-full h-full ${
@@ -93,7 +109,7 @@ const StatusPreview = ({
           <div className="absolute top-8 left-4 right-16 z-10 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <img
-                src={contact?.avaatar}
+                src={contact?.avatar}
                 alt={contact?.name}
                 className="w-10 h-10 rounded-full object-cover border-2 border-white"
               />

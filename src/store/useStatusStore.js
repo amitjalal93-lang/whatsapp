@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { getSocket } from "../services/chat.service";
 import {
   apiDeleteRequestAuthenticated,
+  apiFilePostRequestAuthenticated,
   apiGetRequestAuthenticated,
-  apiPostRequestAuthenticated,
 } from "../services/url.service";
 
 const useStatusStore = create((set, get) => ({
@@ -72,20 +72,13 @@ const useStatusStore = create((set, get) => ({
   createStatus: async (statusData) => {
     set({ loading: true, error: null });
     try {
-      const formData = new FormData();
-      if (statusData.file) {
-        formData.append(" media", statusData.file);
-      }
-      if (statusData.content?.trim()) {
-        formData.append("content", statusData.content);
-      }
-
-      const { data } = await apiPostRequestAuthenticated(
-        "status",
-        formData,
-
-        { headers: { "content-type": "multipart/form-data" } }
-      );
+      const { data } = await apiFilePostRequestAuthenticated("status", {
+        content: statusData.newStatus,
+        file: statusData.selectedFile,
+        contentType: statusData.selectedFile
+          ? statusData.selectedFile.type
+          : "text",
+      });
 
       // add to status in local state
       if (data.data) {
