@@ -180,6 +180,10 @@ const VideoCallModal = ({ socket }) => {
       console.log(`${role} signaling state`, pc.signalingState);
     };
 
+    pc.onicegatheringstatechange = () => {
+      console.log("ICE gathering:", pc.iceGatheringState);
+    };
+
     setPeerConnection(pc);
     return pc;
   };
@@ -288,27 +292,34 @@ const VideoCallModal = ({ socket }) => {
     };
 
     const handleWebRTCOffer = async ({ offer, senderId, callId }) => {
-      if (!peerConnection) return;
-
       try {
-        await peerConnection.setRemoteDescription(
-          new RTCSessionDescription(offer)
-        );
+        let pc = peerConnection;
+
+        if (!pc) {
+          const stream = await initialzeMedia(callType === "video");
+          pc = createPeerConnection(stream, "receiver");
+          setPeerConnection(pc);
+        }
+
+        await pc.setRemoteDescription(new RTCSessionDescription(offer));
+
         await processQueuedIceCandidates();
 
-        const answer = await peerConnection.createAnswer();
-        await peerConnection.setLocalDescription(answer);
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
 
         socket.emit("webrtc_answer", {
           answer,
           receiverId: senderId,
           callId,
         });
+
         console.log("answer sent");
-      } catch (error) {
-        console.error(" recivear answer error", error);
+      } catch (err) {
+        console.error("offer handling error", err);
       }
     };
+
     // receiver answer
     const handleWebRTCAnswer = async ({ answer }) => {
       if (!peerConnection) return;
@@ -324,8 +335,6 @@ const VideoCallModal = ({ socket }) => {
           new RTCSessionDescription(answer)
         );
         // process ice candidates
-        await processQueuedIceCandidates();
-
         await processQueuedIceCandidates();
 
         // check receiver
@@ -439,6 +448,7 @@ const VideoCallModal = ({ socket }) => {
                 ref={remoteVideoRef}
                 autoPlay
                 playsInline
+                muted
                 className={`w-full h-full bg-gray-800 object-cover ${
                   remoteStream ? "block" : "hidden"
                 }`}
