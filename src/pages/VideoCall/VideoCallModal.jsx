@@ -10,6 +10,7 @@ import {
   FaMicrophoneSlash,
 } from "react-icons/fa";
 import useThemeStore from "../../store/themeStore.js";
+import { usechatStore } from "../../store/chatStore.js";
 const VideoCallModal = ({ socket }) => {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -38,6 +39,7 @@ const VideoCallModal = ({ socket }) => {
     toggleAudio,
     clearIncomingCall,
   } = useVideoCallStore();
+  const { onlineUsers } = usechatStore();
 
   const { user } = useUserStore();
   const { theme } = useThemeStore();
@@ -208,6 +210,8 @@ const VideoCallModal = ({ socket }) => {
     }
   };
 
+  console.log("onlineUsers ------------------>", onlineUsers);
+
   // recciver : answer call
   const handleAnswerCall = async () => {
     try {
@@ -221,7 +225,7 @@ const VideoCallModal = ({ socket }) => {
       socket.emit("accept_call", {
         callerId: incomingCall?.callerId,
         callId: incomingCall?.callId,
-        receiverId: {
+        receiverInfo: {
           username: user?.username,
           profilePicture: user?.profilePicture,
         },
